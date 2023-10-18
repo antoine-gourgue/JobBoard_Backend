@@ -46,7 +46,7 @@ Route.post('api/register', async ({ request, response, auth }) => {
     password: schema.string(),
     firstName: schema.string(),
     name: schema.string(),
-    phone: schema.string({}, [rules.mobile()]),
+    phone: schema.string(),
     address: schema.string.optional(),
     roleId: schema.number.optional(),
   })
@@ -71,6 +71,7 @@ Route.post('api/register', async ({ request, response, auth }) => {
     console.log('Error:', error)
 
     if (error instanceof ValidationException) {
+      console.log((error as any).messages)
       return response.status(422)
     }
     return response.badRequest('Registration failed due to some error.')
