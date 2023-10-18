@@ -11,7 +11,7 @@ export default class AdvertisementsController {
     return AdvertisementService.getById(params.id)
   }
 
-  public async create({ request, response}: HttpContextContract) {
+  public async create({ request, response }: HttpContextContract) {
     const payload = await request.validate(CreateAdvertisementValidator)
     const advertisement = await AdvertisementService.create(payload)
     return response.created(advertisement)
