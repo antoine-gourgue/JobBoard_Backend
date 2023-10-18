@@ -11,9 +11,24 @@ Route.post('api/login', async ({ auth, request, response }) => {
 
   try {
     const { email, password } = await request.validate({ schema: loginSchema })
-    const token = await auth.use('api').attempt(email, password)
+    const token = await auth.use('api').attempt(email, password, { expiresIn: '7 days' })
+    const user = await User.findBy('email', email)
+    if (!user) {
+      throw new Error("L'utilisateur n'a pas été trouvé malgré une authentification réussie.")
+    }
     return response.send({
-      token,
+      token: token.token,
+      user: {
+        id: user.id,
+        email: user.email,
+        first_name: user.firstName,
+        name: user.name,
+        phone: user.phone,
+        address: user.address,
+        role_id: user.roleId,
+        created_at: user.createdAt,
+        updated_at: user.updatedAt,
+      },
     })
   } catch (error) {
     console.log('Error:', error)
@@ -23,7 +38,7 @@ Route.post('api/login', async ({ auth, request, response }) => {
     }
     return response.badRequest('Invalid credentials or other error occurred.')
   }
-})
+}).middleware('authCheck')
 
 Route.post('api/register', async ({ request, response, auth }) => {
   const registerSchema = schema.create({
@@ -48,7 +63,9 @@ Route.post('api/register', async ({ request, response, auth }) => {
     user.roleId = payload.roleId || 1
 
     await user.save()
-    const token = await auth.use('api').attempt(payload.email, payload.password , {expiresIn: '7 days'})
+    const token = await auth
+      .use('api')
+      .attempt(payload.email, payload.password, { expiresIn: '7 days' })
     return response.ok({ token })
   } catch (error: any) {
     console.log('Error:', error)
@@ -58,4 +75,9 @@ Route.post('api/register', async ({ request, response, auth }) => {
     }
     return response.badRequest('Registration failed due to some error.')
   }
-})
+}).middleware('authCheck')
+
+Route.post('api/logout', async ({ auth, response }) => {
+  await auth.use('api').revoke()
+  return response.ok({ message: 'Déconnecté avec succès' })
+}).middleware(['auth:api'])
