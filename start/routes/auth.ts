@@ -66,7 +66,7 @@ Route.post('api/register', async ({ request, response, auth }) => {
     const token = await auth
       .use('api')
       .attempt(payload.email, payload.password, { expiresIn: '7 days' })
-    return response.ok({ token })
+    return response.ok({ token, user })
   } catch (error: any) {
     console.log('Error:', error)
 
