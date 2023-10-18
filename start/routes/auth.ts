@@ -60,7 +60,7 @@ Route.post('api/register', async ({ request, response, auth }) => {
     user.name = payload.name
     user.phone = payload.phone
     user.address = payload.address || ''
-    user.roleId = payload.roleId || 1
+    user.roleId = payload.roleId || 2
 
     await user.save()
     const token = await auth
