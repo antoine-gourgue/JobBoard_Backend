@@ -17,7 +17,14 @@ export class UserService {
   }
 
   public static async delete(userId: number) {
-    const user = await this.getById(userId)
-    await user.delete()
+    try {
+      const user = await this.getById(userId)
+      await user.delete()
+    } catch (error) {
+      if (error.code === 'E_ROW_NOT_FOUND') {
+        throw new Error('User not found') // ou vous pouvez choisir de gérer cela autrement
+      }
+      throw error // Si ce n'est pas l'erreur attendue, relancez-la pour la gérer à un niveau supérieur
+    }
   }
 }

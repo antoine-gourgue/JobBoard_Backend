@@ -6,4 +6,3 @@ Route.group(() => {
   Route.put('/:id', 'UsersController.update')
   Route.delete('/:id', 'UsersController.delete')
 }).prefix('/api/users')
-

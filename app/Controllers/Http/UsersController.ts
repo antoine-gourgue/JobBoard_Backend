@@ -17,7 +17,15 @@ export default class UsersController {
   }
 
   public async delete({ params, response }: HttpContextContract) {
-    await UserService.delete(params.id)
-    response.status(204)
+    try {
+      await UserService.delete(params.id)
+      response.status(204)
+    } catch (error) {
+      if (error.message === 'User not found') {
+        response.status(404).send({ message: 'User not found' })
+        return;
+      }
+      response.status(500).send({ message: 'Internal Server Error' })
+    }
   }
 }
