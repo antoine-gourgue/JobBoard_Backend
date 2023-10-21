@@ -3,6 +3,7 @@ import './routes/users'
 import './routes/company'
 import './routes/advertisement'
 import './routes/auth'
+import './routes/roles'
 
 Route.get('/', async () => {
   return { hello: 'world' }
