@@ -10,9 +10,9 @@ export type tUpdateAdvertisement = {
 export default class UpdateAdvertisementValidator {
   constructor(protected ctx: HttpContextContract) {}
   public schema = schema.create({
-    name: schema.string(),
-    description: schema.string(),
-    short_description: schema.string(),
-    contract_type: schema.string(),
+    name: schema.string.optional(),
+    description: schema.string.optional(),
+    short_description: schema.string.optional(),
+    contract_type: schema.string.optional(),
   })
 }
