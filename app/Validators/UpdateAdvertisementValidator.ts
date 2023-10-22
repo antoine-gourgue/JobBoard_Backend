@@ -2,10 +2,10 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export type tUpdateAdvertisement = {
-  name: string
-  description: string
-  short_description: string
-  contract_type: string
+  name?: string
+  description?: string
+  short_description?: string
+  contract_type?: string
 }
 export default class UpdateAdvertisementValidator {
   constructor(protected ctx: HttpContextContract) {}

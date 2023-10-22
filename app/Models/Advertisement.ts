@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { computed } from '@adonisjs/lucid/build/src/Orm/Decorators'
 
 export default class Advertisement extends BaseModel {
   @column({ isPrimary: true })
@@ -22,4 +23,11 @@ export default class Advertisement extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  public _userAlreadyApplied?: boolean
+
+  @computed()
+  public get userAlreadyApplied(): boolean {
+    return this._userAlreadyApplied || false
+  }
 }

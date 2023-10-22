@@ -2,10 +2,12 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { AdvertisementService } from 'App/Services/AdvertisementService'
 import CreateAdvertisementValidator from 'App/Validators/CreateAdvertisementValidator'
 import UpdateAdvertisementValidator from 'App/Validators/UpdateAdvertisementValidator'
+import User from 'App/Models/User'
 
 export default class AdvertisementsController {
-  public async index({}: HttpContextContract) {
-    return AdvertisementService.all()
+  public async index({ auth }: HttpContextContract) {
+    const user: User | undefined = auth.user as User
+    return AdvertisementService.all(user)
   }
   public async getById({ params }: HttpContextContract) {
     return AdvertisementService.getById(params.id)
